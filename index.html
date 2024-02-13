@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valentine's Day</title>
+    <style>
+        /* 標題設置 */
+        h1 {
+            background-color: #FFC0CB; /* 粉紅色底 */
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin: 0; /* 邊距設為0 */
+        }
+
+        /* 內容區域設置 */
+        .content {
+            background-color: #F08080; /* 莫蘭迪奶茶色 */
+            padding: 20px;
+            margin-top: 0; /* 上邊距設為0 */
+            margin-bottom: 0; /* 下邊距設為0 */
+        }
+
+        /* "Please answer the question"以下的背景設置為 #31EAC0 */
+        #questionSection {
+            background-color: #CD5C5C; /* #31EAC0的顏色 */
+            padding: 20px;
+            margin: 20px; /* 設定邊距 */
+        }
+
+        /* 樣式設置 */
+        label {
+            font-weight: bold;
+            color: white;
+        }
+
+        input[type="text"] {
+            border-right: 2px solid black;
+        }
+
+        /* 調整按鈕的樣式 */
+        .submit-btn {
+            display: block;
+            margin-top: 10px; /* 調整按鈕和文本框之間的間距 */
+        }
+
+        /* 調整文本顏色 */
+        #boyResult,
+        #girlResult,
+        #completionMessage,
+        #questionSection h2,
+        #girlQuestion label {
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h1>2024 Valentine's Day</h1>
+    <div class="content">
+        <h2>Welcome to M&J's World</h2>
+        <p>M is a boy from a vibrant and diverse country known for its rich cultural heritage, stunning natural landscapes, and warm hospitality.</p>
+        <p>M 是一位來自一個充滿活力和多樣性的國家，以其豐富的文化遺產，令人驚嘆的自然風景和熱情好客而聞名。</p>
+        <p>J is a girl from a captivating island known for its bustling cities, breathtaking scenery, and delicious cuisine.</p>
+        <p>J 是一位來自一個迷人島嶼的女孩，以其繁華的城市、令人驚嘆的景色和美味的美食而聞名。</p>
+
+        <!-- 新增遊戲開始按鈕 -->
+        <button onclick="startGame()">Game Start</button>
+
+        <!-- 顯示問題設定 -->
+        <div id="questionSection" style="display: none;">
+            <h2>Please answer the question</h2>
+            <form onsubmit="return checkBoyName(event)">
+                <label for="boyName">Enter the boy's name:</label><br>
+                <input type="text" id="boyName" name="boyName" style="font-weight: bold;"><br><br>
+
+                <!-- 將 "Submit Boy's Name" 按鈕移到 "Enter the boy's name:" 文本框之後 -->
+                <input type="submit" class="submit-btn" value="Submit Boy's Name">
+
+                <p id="girlQuestion" style="display: none;">
+                    <label for="girlLocation">Enter where the girl is from:</label><br>
+                    <input type="text" id="girlLocation" name="girlLocation" style="font-weight: bold;"><br><br>
+
+                    <!-- "Submit Girl's Location" 按鈕移到 "Enter where the girl is from" 文本框之後 -->
+                    <input type="submit" class="submit-btn" value="Submit Girl's Location" onclick="return checkGirlLocation(event);">
+                </p>
+            </form>
+
+            <p id="boyResult"></p>
+            <p id="girlResult"></p>
+            <p id="completionMessage" style="display: none;">Congratulations on completing the first step. <a href="first_page.html">Next</a></p>
+        </div>
+    </div>
+
+    <script>
+        // 正確的男孩姓名和女孩所在地
+        const correctBoyName = "Marcos";
+        const correctGirlLocation = "Taiwan"; // 將 "taiwan" 修改為 "Taiwan"
+
+        // 開始遊戲函數
+        function startGame() {
+            document.getElementById("questionSection").style.display = "block"; // 顯示問題設定部分
+        }
+
+        // 檢查玩家輸入的男孩姓名和女孩所在地是否正確
+        function checkBoyName(event) {
+            event.preventDefault(); // 防止表單提交重新加載頁面
+
+            const boyInput = document.getElementById("boyName").value.trim().toLowerCase();
+            const boyResultDisplay = document.getElementById("boyResult");
+            const girlQuestionDisplay = document.getElementById("girlQuestion");
+            const completionMessageDisplay = document.getElementById("completionMessage");
+
+            if (boyInput === correctBoyName.toLowerCase()) {
+                boyResultDisplay.textContent = "Correct! The boy's name is " + correctBoyName + ".";
+                girlQuestionDisplay.style.display = "block";
+            } else {
+                boyResultDisplay.textContent = "Incorrect! Please try again.";
+                document.getElementById("boyName").value = ""; // 清空男孩答案
+                document.getElementById("girlLocation").value = ""; // 清空女孩答案
+                girlQuestionDisplay.style.display = "none"; // 隱藏女孩問題
+            }
+
+            return false; // 防止表單提交
+        }
+
+        // 檢查玩家輸入的女孩所在地是否正確
+        function checkGirlLocation(event) {
+            event.preventDefault(); // 防止表單提交重新加載頁面
+
+            const girlInput = document.getElementById("girlLocation").value.trim().toLowerCase();
+            const girlResultDisplay = document.getElementById("girlResult");
+            const completionMessageDisplay = document.getElementById("completionMessage");
+
+            if (girlInput === correctGirlLocation.toLowerCase()) {
+                girlResultDisplay.textContent = "Correct! The girl is from " + correctGirlLocation + ".";
+                completionMessageDisplay.style.display = "block";
+            } else {
+                girlResultDisplay.textContent = "Incorrect! The girl is not from " + girlInput + ".";
+            }
+
+            return false; // 防止表單提交
+        }
+    </script>
+</body>
+</html>

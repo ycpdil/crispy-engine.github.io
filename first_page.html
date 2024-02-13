@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: white;
+            background-color: #FFC0CB; /* 粉紅色底 */
+            padding: 10px;
+            text-align: center;
+        }
+        #quiz {
+            margin-bottom: 20px;
+        }
+        .question {
+            margin-bottom: 20px; /* 問題之間的間距 */
+            line-height: 1.5; /* 增加行間距 */
+        }
+        label {
+            margin-right: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #E9967A; /* 莫蘭迪紅色 */
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #result {
+            margin-top: 20px;
+            font-weight: bold;
+            padding: 10px;
+            background-color: wheat; /* 莫蘭迪藍色 */
+            color: white;
+            line-height: 1.5; /* 增加行間距 */
+        }
+    </style>
+</head>
+<body>
+    <h1>Valentine's Day Quiz</h1>
+    <div id="quiz"></div>
+    <button onclick="submitQuiz()">Submit Quiz</button>
+    <div id="result" style="display: none;"></div>
+
+    <script>
+        // 47個題目、選項和正確答案
+        const questions = [
+            { question: "M&J第一次出門去哪裡？", options: ["高雄駁二", "台南南紡"], answer: "高雄駁二" },
+            { question: "M&J 第一次出國去哪裡？", options: ["日本", "馬來西亞"], answer: "日本" },
+            { question: "M&J去過哪一個樂園？", options: ["DisneyLand", "DisneySea"], answer: "DisneyLand" },
+            { question: "J最喜歡的滑雪運動？", options: ["Snowboard", "Ski"], answer: "Snowboard" },
+            { question: "M最喜歡的飲料？", options: ["牛奶", "美祿"], answer: "牛奶" },
+            { question: "M最喜歡滑什麼App？", options: ["Instagram", "Tiktok"], answer: "Tiktok" },
+            { question: "J最喜歡的卡通人物？", options: ["Nick", "Donald Duck"], answer: "Nick" },
+            { question: "M&J第一次玩得運動是什麼？", options: ["四輪滑輪", "飛行傘"], answer: "四輪滑輪" },
+            { question: "M最喜歡吃的食物？", options: ["Nachos", "蚵仔煎"], answer: "Nachos" },
+            { question: "Facetime煙火的簡單手勢？", options: ["2個Ya", "2個讚"], answer: "2個讚" },
+            { question: "J最喜歡的加拿大城市？", options: ["Vancouver", "Montreal"], answer: "Montreal" },
+            { question: "哪個國家擁有世界上最長的海岸線？", options: ["加拿大", "美國"], answer: "加拿大" },
+            { question: "J去加拿大找M時，總共轉了幾次飛機？", options: ["2", "3"], answer: "2" },
+            { question: "M最喜歡穿什麼顏色的衣服？", options: ["白色", "黑色"], answer: "白色" },
+            { question: "M&J第一首合唱的歌？", options: ["如果可以", "天高地厚"], answer: "天高地厚" },
+            { question: "M&J 交往後第一次去哪裡玩？", options: ["台南南紡", "嘉義奮起湖"], answer: "台南南紡" },
+            { question: "J最喜歡去的地方？", options: ["海邊", "山上"], answer: "山上" },
+            { question: "M&J堆的雪人叫什麼名字？", options: ["Snowangle", "Snowbaby"], answer: "Snowbaby" },
+            { question: "M&J到富士山的dresscode是什麼？", options: ["白色", "藍色"], answer: "白色" },
+            { question: "請問在東京時女僕第一個畫的圖案是什麼？", options: ["哥吉拉", "皮卡丘"], answer: "皮卡丘" },
+            { question: "M&J第一次單獨吃飯的餐廳是哪裡？", options: ["金色三麥", "喬治與瑪麗"], answer: "金色三麥" },
+            { question: "M第一次開J的車是我們第幾次一起出門？", options: ["2", "3"], answer: "3" },
+            { question: "M&J 交往後第一次看的電影是什麼？", options: ["芭比", "元素方程式"], answer: "元素方程式" },
+            { question: "J第一次送M的東西是什麼？", options: ["芒果", "蛋黃酥"], answer: "芒果" },
+            { question: "M第一次送J的東西是什麼？", options: ["麵包", "喉糖"], answer: "喉糖" },
+            { question: "M&J 第一次去的遊樂園？", options: ["迪士尼樂園", "六福村"], answer: "六福村" },
+            { question: "M&J 第一次外出過夜的地點？", options: ["嘉義", "南投"], answer: "嘉義" },
+            { question: "哪一個是交往後，M&J 和Ivy&學長外出的團服顏色？", options: ["白色", "粉紅色"], answer: "粉紅色" },
+            { question: "哪一個是第一個Instargam群組？", options: ["薪水小偷團", "星期六要幹嘛"], answer: "薪水小偷團" },
+            { question: "M送了什麼顏色花給J？", options: ["粉紅色", "紅色"], answer: "粉紅色" },
+            { question: "M喜歡什麼草莓甜點？", options: ["草莓麻糬", "草莓大福"], answer: "草莓大福" },
+            { question: "J沒有養過什麼寵物？", options: ["貓", "鳥"], answer: "貓" },
+            { question: "M&J 總共跟Ivy&學長出去唱過幾次歌？", options: ["2", "3"], answer: "2" },
+            { question: "哪一句口頭禪是J學M？", options: ["屁蛋", "對對對"], answer: "對對對" },
+            { question: "有一次在永康吃了難吃的炸蛋餅是哪一家早餐店？", options: ["Q burger", "晨間廚房"], answer: "晨間廚房" },
+            { question: "M&J 總共溜了幾次滑輪？", options: ["2", "3"], answer: "2" },
+            { question: "有一次逛夜市，Marcos褲子沾到醬汁，是哪一個夜市？", options: ["麻豆夜市", "大東夜市"], answer: "麻豆夜市" },
+            { question: "M最常幫J準備的早餐是什麼？", options: ["優格", "布丁"], answer: "優格" },
+            { question: "M最會假裝什麼？", options: ["假笑", "假哭"], answer: "假哭" },
+            { question: "M&J 在永康要上班時睡過頭幾次？", options: ["2", "3"], answer: "2" },
+            { question: "M&J 在南投體驗了什麼遊戲？", options: ["跳傘", "飛行傘"], answer: "飛行傘" },
+            { question: "哪一個地方M&J去了兩次？", options: ["高雄", "嘉義"], answer: "嘉義" },
+            { question: "J在馬來西亞吃了什麼？", options: ["肉骨茶", "榴蓮"], answer: "榴蓮" },
+            { question: "M&J快到富士山前看到什麼卡通人物？", options: ["Hello Kitty", "Mickey Mouse"], answer: "Hello Kitty" },
+            { question: "M&J到富士山搭的富士迴遊列車是什麼顏色？", options: ["紅色", "藍色"], answer: "紅色" },
+            { question: "M&J遇到吃飯停電時在吃什麼晚餐？", options: ["漢堡", "小火鍋"], answer: "小火鍋" },
+            { question: "M&J 一起到金色三麥吃過幾次飯？", options: ["2", "3"], answer: "3" }
+        ];
+
+        // 隨機選擇10個題目
+        const selectedQuestions = questions.sort(() => Math.random() - 0.5).slice(0, 10);
+
+        // 顯示題目和選項
+        const quizDiv = document.getElementById('quiz');
+        selectedQuestions.forEach((item, index) => {
+            const questionDiv = document.createElement('div');
+            questionDiv.textContent = `${index + 1}. ${item.question}`;
+            questionDiv.classList.add('question'); // 添加問題文字的class
+            const optionsDiv = document.createElement('div');
+            item.options.forEach(option => {
+                const optionLabel = document.createElement('label');
+                const optionInput = document.createElement('input');
+                optionInput.type = 'radio';
+                optionInput.name = `question${index}`;
+                optionInput.value = option;
+                optionLabel.textContent = option;
+                optionsDiv.appendChild(optionInput);
+                optionsDiv.appendChild(optionLabel);
+            });
+            quizDiv.appendChild(questionDiv);
+            quizDiv.appendChild(optionsDiv);
+            const spacer = document.createElement('div');
+            spacer.style.height = '1.5em'; // 間距為1.5em
+            quizDiv.appendChild(spacer);
+        });
+
+        // 提交答案並顯示結果
+        function submitQuiz() {
+            let score = 0;
+            selectedQuestions.forEach((item, index) => {
+                const selectedOption = document.querySelector(`input[name="question${index}"]:checked`);
+                if (selectedOption && selectedOption.value === item.answer) {
+                    score += 10; // 每個題目10分
+                }
+            });
+            const resultDiv = document.getElementById('result');
+            resultDiv.style.display = 'block';
+            if (score >= 100) {
+                resultDiv.innerHTML = `<span style="color: green;">Congratulations! You passed the quiz. Your girlfriend is a ${score} out of 100 girlfriend!</span>`;
+                const backButton = document.createElement('button');
+                backButton.textContent = '返回首頁';
+                backButton.onclick = function() {
+                    window.location.href = 'index.html'; // 修改為您的首頁文件名
+                };
+                resultDiv.appendChild(backButton);
+            } else {
+                resultDiv.innerHTML = `<span style="color: red;">You scored ${score}. You are a ${score} out of 100 boyfriend. Your girlfriend is more popular than you.</span>`;
+            }
+        }
+    </script>
+</body>
+</html>
